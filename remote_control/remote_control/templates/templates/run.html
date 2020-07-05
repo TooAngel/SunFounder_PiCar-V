@@ -33,7 +33,7 @@
         width:  100%;
       }
       #div_streamer {
-        background: url(http://{{ host }}:8080/?action=stream) no-repeat center center; 
+        background: url(http://{{ host }}:8080/?action=stream) no-repeat center center;
         background-size: auto 90%;
         width:  100%;
         height:  100%;
@@ -80,6 +80,7 @@
       var allowed = true;
 
       function run_action(value){
+        console.log(`run_action(${value})`);
         var xmlHttp  = new XMLHttpRequest();
         var protocol  = window.location.protocol;
         var host      = window.location.host;
@@ -91,6 +92,7 @@
         return xmlHttp.responseText;
       }
       function set_speed(value){
+        console.log(`set_speed(${value})`);
         var xmlHttp  = new XMLHttpRequest();
         var protocol  = window.location.protocol;
         var host      = window.location.host;
@@ -251,6 +253,54 @@
             }
         }
       }
+
+
+
+
+      let controller;
+      let gamePadIndex;
+
+      window.addEventListener("gamepadconnected", (e) => {
+        console.log(`connected ${e}`)
+        gamePadIndex = 0;
+        // scanGamePads();
+        setInterval(step, 100);
+      });
+      window.addEventListener("gamepaddisconnected", (e) => console.log(`disconnected ${e}`));
+
+      function scanGamePads() {
+        // gamepad support
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+        for (var i = 0; i < gamepads.length; i++) {
+          if (gamepads[i]) {
+            controller = gamepads[i];
+            console.log(`controller found`);
+            console.log(controller);
+            // window.requestAnimationFrame(step);
+            break;
+          }
+        }
+      }
+
+      function step() {
+        const forward = navigator.getGamepads()[gamePadIndex].buttons[7].value - navigator.getGamepads()[gamePadIndex].buttons[6].value;
+        const direction = navigator.getGamepads()[gamePadIndex].axes[0];
+        const camPan = navigator.getGamepads()[gamePadIndex].axes[2];
+        const camTilt = navigator.getGamepads()[gamePadIndex].axes[3];
+
+        console.log(forward, direction, camPan, camTilt);
+        var xmlHttp  = new XMLHttpRequest();
+        var protocol  = window.location.protocol;
+        var host      = window.location.host;
+        var pathname  = window.location.pathname;
+        url = `${protocol}//${host}${pathname}?forward=${forward.toFixed(4)}&direction=${direction.toFixed(4)}&camPan=${camPan.toFixed(4)}&camTilt=${camTilt.toFixed(4)}`;
+        //document.getElementById("debug").innerHTML=url;
+        xmlHttp.open( "GET", url, false );
+        xmlHttp.send( null );
+        return xmlHttp.responseText;
+      }
+
+
     </script>
     <div class="mui-container-fluid-height mui-container-fluid-line-height", id="div_streamer">
       <div id="div_control">
