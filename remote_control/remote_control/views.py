@@ -105,7 +105,7 @@ def run(request):
         fw.turn(90 + 45 * direction)
 
     if 'camPan' in request.GET and 'camTilt' in request.GET:
-        expect_pan = 90 + 45 * float(request.GET['camPan'])
+        expect_pan = 90 + -45 * float(request.GET['camPan'])
         expect_tilt = 90 + 45 * float(request.GET['camTilt'])
         cam.to_position(expect_pan, expect_tilt)
 
