@@ -33,7 +33,8 @@
         width:  100%;
       }
       #div_streamer {
-        background: url(http://{{ host }}:8080/?action=stream) no-repeat center center;
+        //background: url(http://{{ host }}:8080/?action=stream) no-repeat center center;
+        background: url(http://{{ host }}:8081/) no-repeat center center;
         background-size: auto 90%;
         width:  100%;
         height:  100%;
@@ -80,7 +81,6 @@
       var allowed = true;
 
       function run_action(value){
-        console.log(`run_action(${value})`);
         var xmlHttp  = new XMLHttpRequest();
         var protocol  = window.location.protocol;
         var host      = window.location.host;
@@ -92,7 +92,6 @@
         return xmlHttp.responseText;
       }
       function set_speed(value){
-        console.log(`set_speed(${value})`);
         var xmlHttp  = new XMLHttpRequest();
         var protocol  = window.location.protocol;
         var host      = window.location.host;
